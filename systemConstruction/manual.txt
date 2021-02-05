@@ -55,9 +55,12 @@
 			mysql -u root -p
 		- Set root password
 			>> SELECT user, plugin, host FROM mysql.user;
-			>> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{password}';
+			>> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${password}';
 			>> FLUSH PRIVILEGES;
 		- Add user and create database
-			>> CREATE USER '{linuxID}'@'localhost' IDENTIFIED BY '{password}';
+			>> CREATE USER '${linuxID}'@'localhost' IDENTIFIED BY '${password}';
+		- Create database and grand it.
+			>> CREATE DATABASE '${dbName}' default character set utf8;
+			>> GRANT ALL PREVILEGES ON ${dbName}.* to '${linuxID}'@'localhost';
 
 	TODO: apache2 rewrite module, .htaccess
