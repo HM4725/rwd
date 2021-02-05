@@ -1,0 +1,63 @@
+# Set time zone (KST)
+	ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+
+# oh-my-zsh
+	* Client:
+		- Install MesloLGS NF font
+			https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
+	* Server:
+		1. Install
+			- apt install zsh
+			- chsh -s `which zsh`
+			- sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+			- git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k
+			- echo 'source ~/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
+			- zsh
+		2. Auto Suggestions
+			- git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+			- Add the following to ~/.zshrc
+			-------------------------------------------------
+			~~~
+			Plugin=(
+				git
+			+++ zsh-autosuggestions
+			)
+			~~~
+			# User configuration
+			+++ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg={#color}'
+			~~~
+			--------------------------------------------------
+			- zsh
+
+# vimrc
+		mv vimrc ~/.vimrc
+
+# Web Server: Apache2 + python3.8 + Mysql
+	1. Install web server
+		apt-get install apache2
+	2. Install python cgi
+		- Add the following to /etc/apache2/sites-enabled/000-default.conf
+		--------------------------------------------
+		~~~
+		DocumentRoot /var/www/html
+		+++ <Directory /var/www/html>
+		+++		AddHandler cgi-script .py
+		+++		Options ExecCGI
+		+++ </Directory>
+		# ~~~ 
+		--------------------------------------------
+		- sudo a2enmod cgi
+		- sudo service apache2 restart
+		- chmod 755 file.py
+	3. Install mysql
+		- Install and execute
+			apt-get install mysql-server
+			mysql -u root -p
+		- Set root password
+			>> SELECT user, plugin, host FROM mysql.user;
+			>> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{password}';
+			>> FLUSH PRIVILEGES;
+		- Add user and create database
+			>> CREATE USER '{linuxID}'@'localhost' IDENTIFIED BY '{password}';
+
+	TODO: apache2 rewrite module, .htaccess
