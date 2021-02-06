@@ -18,6 +18,7 @@ filetype plugin indent on    " required
 imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 set autoindent
 set smartindent
+set expandtab
 set tabstop=2
 set shiftwidth=2
 set nu
