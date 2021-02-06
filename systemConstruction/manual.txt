@@ -30,7 +30,11 @@
 			- zsh
 
 # vimrc
-		mv vimrc ~/.vimrc
+		- git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+		- mv vimrc ~/.vimrc
+		- [Vim] :source %
+		- [Vim] :PluginInstall
+
 
 # Web Server: Apache2 + python3.8 + Mysql
 	1. Install web server

@@ -24,3 +24,11 @@ set nu
 colorscheme default
 set backspace=indent,eol,start
 syntax enable
+
+" Custom key mapping of hm
+nmap <F9> :NERDTree<CR>
+nmap nerd :NERDTreeToggle<CR>
+nmap <C-b><Up>		<C-w>k
+nmap <C-b><Down>	<C-w>j
+nmap <C-b><Left>	<C-w>h 
+nmap <C-b><Right>	<C-w>l
