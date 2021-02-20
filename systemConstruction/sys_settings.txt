@@ -25,7 +25,7 @@
       )
       ~~~
       # User configuration
-      +++ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg={#color}'
+      +++ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#{color}'
       ~~~
       --------------------------------------------------
       - zsh
@@ -33,7 +33,7 @@
 
 # vimrc
   - git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-  - mv vimrc ~/.vimrc
+  - cp vimrc ~/.vimrc
   - [Vim] :source %
   - [Vim] :PluginInstall
 

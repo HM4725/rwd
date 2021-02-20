@@ -1,0 +1,7 @@
+# Install Anaconda
+  curl https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh --output anaconda.sh
+  bash anaconda.sh
+
+# Create virtual environment 
+  conda create -n {name} python={version}
+  conda activate {name} 
