@@ -1,1 +1,110 @@
-pip3 install django
+# Install django and connect mysql to it
+  ## It is essential that mysql, conda are previously installed.
+>> pip install django
+>> django-admin startproject mysite
+>> cd mysite
+>> vi settings.py
+-[EDIT STRAT]---------------------------------
+ALLOWED_HOSTS = ['${EXTERNAL_IP}']
+DATABASES = {
+  'default': {
+    'ENGINE': 'django.db.backends.mysql',
+    'NAME': '${DB_NAME}',
+    'USER': '${DB_USER_ID}',
+    'PASSWORD': '${DB_USER_PASSWORD}',
+    'HOST': '127.0.0.1',
+    'PORT': '3306',
+  }
+}
+~~~
+LANGUAGE_CODE = 'ko-kr'
+TIME_ZONE = 'Asia/Seoul'
+-[EDIT END]-----------------------------------
+
+>> conda install mysqlclient
+>> python manage.py inspectdb
+>> python manage.py runserver ${INTERNAL_IP}:${PORT}
+
+
+# Connect apache2 to django
+>> sudo apt-get install apache2
+>> sudo apt-get install libapache2-mod_wsgi-py3
+>> sudo vi /etc/apache2/sites-available/000-default.conf
+-[EDIT STRAT]---------------------------------
+~~~
+<VirtaulHost *:${port}>
+  ServerName django1
+  <Directory /home/${user}/${django_project}/${django_project}>
+    <Files wsgi.py>
+      Require all granted
+    </Files>
+  </Directory>
+  WSGIDaemonProcess django1 python-path=${anaconda_directory}/envs/${virtual_environment}/lib/python${version}/site-packages
+  WSGIProcessGroup django1
+  WSGIScriptAlias / /home/${user}/${django_project}/${django_project}/wsgi.py process-group=django1
+</VirtualHost>
+-[EDIT END]-----------------------------------
+
+>> sudo vi /etc/hosts
+-[EDIT STRAT]---------------------------------
+127.0.0.1 localhost
+127.0.0.1 django1
+~~~
+-[EDIT END]-----------------------------------
+
+>> sudo vi /etc/apache2/ports.conf
+-[EDIT STRAT]---------------------------------
+Listen 80
+Listen ${port}
+~~~
+-[EDIT END]-----------------------------------
+
+>> vi /home/${user}/${django_project}/${django_project}/wsgi.py
+-[EDIT STRAT]---------------------------------
+~~~
+"""
+import os, sys
+path = os.path.abspath(__file__ + '/../..')
+if path not in sys.path:
+  sys.path.append(path)
+~~~
+-[EDIT END]-----------------------------------
+
+>> sudo service apache2 restart
+
+
+# Static files in django
+>> vi {$django_project}/settings.py
+-[EDIT STRAT]---------------------------------
+~~~
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+~~~
+-[EDIT END]-----------------------------------
+
+>> python manage.py collectstatic
+>> sudo vi /etc/apache2/sites-available/000-default.conf
+-[EDIT STRAT]---------------------------------
+<VirtualHost *:${port}>
+  ~~~
+  Alias /static/ /home/${user}/${django_project}/staticfiles/
+  <Directory /home/${user}/${django_project}/staticfiles>
+    Require all granted
+  </Directory>
+</VirtualHost>
+-[EDIT END]-----------------------------------
+
+>> sudo service apache2 restart
+
+
+# ERROR
+1. OperationalError: (2002, "Can't connect to local MySQL server through socket '/tmp/mysql.sock' (2)")
+  >> sudo vi {$django_project}/settings.py
+  -[EDIT STRAT]---------------------------------
+  DATABASES = {
+    'default': {
+      ~~~
+  --- 'HOST': 'localhost',
+  +++ 'HOST': '127.0.0.1',
+  -[EDIT END]-----------------------------------
+
